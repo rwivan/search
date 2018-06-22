@@ -3,16 +3,19 @@ package magdv.ivan.search.ui
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import com.arellomobile.mvp.presenter.InjectPresenter
 import magdv.ivan.search.App
 import magdv.ivan.search.R
 import magdv.ivan.search.mvp.MainPresenter
+import magdv.ivan.search.mvp.MainView
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.SupportFragmentNavigator
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), MainView {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
     @InjectPresenter
@@ -24,9 +27,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+        return true
+    }
+
     override fun onResume() {
         super.onResume()
-        val navigator: Navigator = object: SupportFragmentNavigator(supportFragmentManager, R.id.main_container) {
+        val navigator: Navigator = object : SupportFragmentNavigator(supportFragmentManager, R.id.main_container) {
             override fun createFragment(screenKey: String, data: Any): Fragment {
                 return Fragment()
             }
