@@ -2,11 +2,13 @@ package magdv.ivan.search.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import magdv.ivan.search.App
 import magdv.ivan.search.R
 import magdv.ivan.search.mvp.MainPresenter
@@ -15,6 +17,7 @@ import org.jetbrains.anko.toast
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.SupportFragmentNavigator
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -33,17 +36,23 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
         val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                mainPresenter.instantSearch(newText)
-                return true
-            }
-        })
+        val observable = Observable.create<String>() {
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    it.onNext(newText.toString())
+                    return true
+                }
+                override fun onQueryTextSubmit(query: String?): Boolean = false
+            })
+        }.debounce(500, TimeUnit.MILLISECONDS)
+                .map { it.toString() }
+                .filter { it.length > 2 }
+                .distinctUntilChanged()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    mainPresenter.instantSearch(it.toString())
+                }
         return super.onCreateOptionsMenu(menu)
     }
 
