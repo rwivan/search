@@ -19,6 +19,6 @@ class SearchNavigator(fragmentManager: FragmentManager, containerId: Int) : Supp
     }
 
     override fun showSystemMessage(message: String?) {
-
+        
     }
 }
