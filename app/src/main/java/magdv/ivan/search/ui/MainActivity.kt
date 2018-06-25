@@ -36,12 +36,13 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
         val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
-        val observable = Observable.create<String>() {
+        Observable.create<String>() {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     it.onNext(newText.toString())
                     return true
                 }
+
                 override fun onQueryTextSubmit(query: String?): Boolean = false
             })
         }.debounce(500, TimeUnit.MILLISECONDS)
