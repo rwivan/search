@@ -2,7 +2,6 @@ package magdv.ivan.search.mvp
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
-import com.arellomobile.mvp.presenter.InjectPresenter
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -15,7 +14,7 @@ import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 @InjectViewState
-class MainPresenter : MvpPresenter<MainView>() {
+class ListPresenter : MvpPresenter<ListView>() {
     @Inject
     lateinit var gitHubApi: IGitHubApi
     @Inject
@@ -26,25 +25,27 @@ class MainPresenter : MvpPresenter<MainView>() {
     }
 
     fun instantSearch(searchTerm: String) {
+        router.navigateTo(Screen.LIST_SCREEN)
         gitHubApi.search(searchTerm)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<SearchResponse> {
                     override fun onComplete() {
-                        //viewState.activityToast("конец")
+                        viewState.activityToast2("конец")
                     }
 
                     override fun onSubscribe(d: Disposable) {
-                        //viewState.activityToast("кто-то подписался")
+                        viewState.activityToast2("кто-то подписался")
                     }
 
                     override fun onNext(t: SearchResponse) {
-                        //viewState.activityToast("дальше")
-                        //viewState.activityToast(t.total_count.toString())
+                        viewState.showSearchResult(t)
+                        viewState.activityToast2("дальше")
+                        viewState.activityToast2(t.total_count.toString())
                     }
 
                     override fun onError(e: Throwable) {
-                        //viewState.activityToast("ошибка")
+                        viewState.activityToast2("ошибка")
                     }
                 })
     }

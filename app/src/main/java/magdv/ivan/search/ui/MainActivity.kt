@@ -6,26 +6,37 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.PresenterType
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import magdv.ivan.search.App
 import magdv.ivan.search.R
+import magdv.ivan.search.Screen
+import magdv.ivan.search.mvp.ListPresenter
+import magdv.ivan.search.mvp.ListView
 import magdv.ivan.search.mvp.MainPresenter
 import magdv.ivan.search.mvp.MainView
+import magdv.ivan.search.network.response.SearchResponse
+import org.jetbrains.anko.support.v4.withArguments
 import org.jetbrains.anko.toast
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.SupportFragmentNavigator
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : MvpAppCompatActivity(), MainView, ListView {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
     @InjectPresenter
     lateinit var mainPresenter: MainPresenter;
+    @InjectPresenter(type=PresenterType.GLOBAL)
+    lateinit var listPresenter: ListPresenter;
+    @Inject
+    lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.appComponent.inject(this)
@@ -52,7 +63,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    mainPresenter.instantSearch(it.toString())
+                    listPresenter.instantSearch(it.toString())
                 }
         return super.onCreateOptionsMenu(menu)
     }
@@ -60,8 +71,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onResume() {
         super.onResume()
         val navigator: Navigator = object : SupportFragmentNavigator(supportFragmentManager, R.id.main_container) {
-            override fun createFragment(screenKey: String, data: Any): Fragment {
-                return Fragment()
+            override fun createFragment(screenKey: String?, data: Any?): Fragment {
+                when (screenKey) {
+                    Screen.CARD_SCREEN -> return CardFragment()
+                    else -> return ListFragment()
+                }
             }
 
             override fun exit() {
@@ -82,5 +96,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun activityToast(string: String) {
         toast(string)
+    }
+
+    override fun activityToast2(string: String) {
+    }
+
+    override fun showSearchResult(searchResult: SearchResponse) {
     }
 }
