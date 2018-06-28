@@ -5,12 +5,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import magdv.ivan.search.R
-import magdv.ivan.search.network.response.SearchResponse
+import magdv.ivan.search.data.Repository
 
-class RecyclerViewAdapter internal constructor(internal var searchResponse: SearchResponse) : RecyclerView.Adapter<RecyclerViewAdapter.SearchResponseViewHolder>(){
+class RecyclerViewAdapter internal constructor(internal var result: List<Repository>) : RecyclerView.Adapter<RecyclerViewAdapter.SearchResponseViewHolder>(){
 
     class SearchResponseViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var cv: CardView
@@ -41,14 +40,14 @@ class RecyclerViewAdapter internal constructor(internal var searchResponse: Sear
     }
 
     override fun onBindViewHolder(vh: SearchResponseViewHolder, i: Int) {
-        vh.name.setText(searchResponse.items[i].name)
-        vh.description.setText(searchResponse.items[i].description)
-        vh.language.setText(searchResponse.items[i].language)
-        vh.stargazers.setText(searchResponse.items[i].stargazers_count.toString())
-        vh.forks.setText(searchResponse.items[i].forks_count.toString())
+        vh.name.setText(result[i].name)
+        vh.description.setText(result[i].description)
+        vh.language.setText(result[i].language)
+        vh.stargazers.setText(result[i].stargazers_count.toString())
+        vh.forks.setText(result[i].forks_count.toString())
     }
 
     override fun getItemCount(): Int {
-        return searchResponse.items.size
+        return result.size
     }
 }
