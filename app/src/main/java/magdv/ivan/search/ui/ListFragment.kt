@@ -62,10 +62,13 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun showSearchResult(searchResult: List<Repository>)
+    override fun showSearchResult(searchResult: MutableList<Repository>)
     {
-        val adapter = RecyclerViewAdapter(searchResult)
-        recyclerView.setAdapter(adapter)
+        if (null == recyclerView.adapter) {
+            val adapter = RecyclerViewAdapter(searchResult)
+            recyclerView.setAdapter(adapter)
+        }
+        (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
     }
 
     override fun activityToast2(string: String) {

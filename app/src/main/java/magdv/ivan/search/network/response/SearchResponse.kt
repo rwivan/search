@@ -4,6 +4,6 @@ import magdv.ivan.search.data.Repository
 
 data class SearchResponse (
         val total_count : Int,
-        val items : List<Repository>
+        val items : MutableList<Repository>
 ) {
 }

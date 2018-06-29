@@ -9,9 +9,12 @@ import android.widget.TextView
 import magdv.ivan.search.R
 import magdv.ivan.search.data.Repository
 
-class RecyclerViewAdapter internal constructor(internal var result: List<Repository>) : RecyclerView.Adapter<RecyclerViewAdapter.SearchResponseViewHolder>(){
+class RecyclerViewAdapter internal constructor(internal var result: MutableList<Repository>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+    private val ITEM = 0
+    private val LOADING = 1
+    var isLoadingAdded : Boolean = false
 
-    class SearchResponseViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    protected class SearchResponseViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var cv: CardView
         internal var name: TextView
         internal var description: TextView
@@ -30,24 +33,55 @@ class RecyclerViewAdapter internal constructor(internal var result: List<Reposit
         }
     }
 
+    protected class ProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): SearchResponseViewHolder {
-        val v = LayoutInflater.from(viewGroup.context).inflate(R.layout.item, viewGroup, false)
-        return SearchResponseViewHolder(v)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(viewGroup.context)
+        when (i) {
+            ITEM -> return SearchResponseViewHolder(inflater.inflate(R.layout.item, viewGroup, false))
+            else -> return ProgressViewHolder(inflater.inflate(R.layout.item_progress, viewGroup, false))
+        }
     }
 
-    override fun onBindViewHolder(vh: SearchResponseViewHolder, i: Int) {
-        vh.name.setText(result[i].name)
-        vh.description.setText(result[i].description)
-        vh.language.setText(result[i].language)
-        vh.stargazers.setText(result[i].stargazers_count.toString())
-        vh.forks.setText(result[i].forks_count.toString())
+    override fun getItemViewType(position: Int): Int {
+        return if (position == result.size - 1 && isLoadingAdded) LOADING else ITEM
+    }
+
+    override fun onBindViewHolder(vh: RecyclerView.ViewHolder, i: Int) {
+        if (vh is SearchResponseViewHolder) {
+            vh.name.setText(result[i].name)
+            vh.description.setText(result[i].description)
+            vh.language.setText(result[i].language)
+            vh.stargazers.setText(result[i].stargazers_count.toString())
+            vh.forks.setText(result[i].forks_count.toString())
+        }
     }
 
     override fun getItemCount(): Int {
         return result.size
+    }
+
+    fun addAll(list: List<Repository>) {
+        result.addAll(list)
+    }
+
+    fun addLoadingFooter() {
+        isLoadingAdded = true
+    }
+
+    fun removeLoadingFooter() {
+        isLoadingAdded = false
+
+//        val position = result.size - 1
+//        val item = getItem(position)
+//
+//        if (item != null) {
+//            movies.removeAt(position)
+//            notifyItemRemoved(position)
+//        }
     }
 }
