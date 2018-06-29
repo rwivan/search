@@ -6,4 +6,5 @@ import magdv.ivan.search.data.Repository
 interface ListView : MvpView {
     fun activityToast2(string: String)
     fun showSearchResult(searchResult: MutableList<Repository>)
+    fun addLoadingFooter()
 }

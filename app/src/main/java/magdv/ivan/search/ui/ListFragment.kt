@@ -71,6 +71,10 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
     }
 
+    override fun addLoadingFooter() {
+        (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
+    }
+
     override fun activityToast2(string: String) {
         toast(string)
     }

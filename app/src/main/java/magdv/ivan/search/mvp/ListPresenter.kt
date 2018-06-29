@@ -60,7 +60,9 @@ class ListPresenter : MvpPresenter<ListView>() {
                     override fun onNext(t: SearchResponse) {
                         totalCount = t.total_count
                         isLastPage = page > totalCount / IGitHubApi.PER_PAGE
+                        viewState.removeLoadingFooter()
                         viewState.showSearchResult(t.items)
+                        viewState.addLoadingFooter()
                         viewState.activityToast2("дальше")
                         viewState.activityToast2(t.total_count.toString())
                     }

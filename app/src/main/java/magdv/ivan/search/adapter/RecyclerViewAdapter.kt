@@ -71,17 +71,17 @@ class RecyclerViewAdapter internal constructor(internal var result: MutableList<
 
     fun addLoadingFooter() {
         isLoadingAdded = true
+        if (result.size > 0) {
+            result.add(result.last())
+            notifyItemRemoved(result.size)
+        }
     }
 
     fun removeLoadingFooter() {
         isLoadingAdded = false
-
-//        val position = result.size - 1
-//        val item = getItem(position)
-//
-//        if (item != null) {
-//            movies.removeAt(position)
-//            notifyItemRemoved(position)
-//        }
+        if (result.size > 0) {
+            result.removeAt(result.size - 1)
+            notifyItemRemoved(result.size)
+        }
     }
 }
