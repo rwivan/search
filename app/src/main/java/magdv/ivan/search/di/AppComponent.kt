@@ -2,6 +2,7 @@ package magdv.ivan.search.di
 
 import dagger.Component
 import magdv.ivan.search.adapter.RecyclerViewAdapter
+import magdv.ivan.search.mvp.CardPresenter
 import magdv.ivan.search.mvp.ListPresenter
 import magdv.ivan.search.mvp.MainPresenter
 import magdv.ivan.search.ui.MainActivity
@@ -14,4 +15,5 @@ interface AppComponent {
     fun inject(mainPresenter: MainPresenter)
     fun inject(listPresenter: ListPresenter)
     fun inject(recyclerViewAdapter: RecyclerViewAdapter)
+    fun inject(cardPresenter: CardPresenter)
 }

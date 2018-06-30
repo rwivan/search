@@ -6,13 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import magdv.ivan.search.App
 import magdv.ivan.search.R
+import magdv.ivan.search.Screen
 import magdv.ivan.search.data.Repository
+import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class RecyclerViewAdapter internal constructor(internal var result: MutableList<Repository>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class RecyclerViewAdapter internal constructor(internal var result: MutableList<Repository>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val ITEM = 0
     private val LOADING = 1
-    var isLoadingAdded : Boolean = false
+    @Inject
+    lateinit var router: Router
+    var isLoadingAdded: Boolean = false
+
+    init {
+        App.appComponent.inject(this)
+    }
 
     protected class SearchResponseViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal var cv: CardView
@@ -43,7 +53,7 @@ class RecyclerViewAdapter internal constructor(internal var result: MutableList<
         val inflater = LayoutInflater.from(viewGroup.context)
         when (i) {
             ITEM -> return SearchResponseViewHolder(inflater.inflate(R.layout.item, viewGroup, false))
-            else -> return ProgressViewHolder(inflater.inflate(R.layout.item_progress, viewGroup, false))
+            else -> return ProgressViewHolder(inflater.inflate(R.layout.progress, viewGroup, false))
         }
     }
 
@@ -58,6 +68,16 @@ class RecyclerViewAdapter internal constructor(internal var result: MutableList<
             vh.language.setText(result[i].language)
             vh.stargazers.setText(result[i].stargazers_count.toString())
             vh.forks.setText(result[i].forks_count.toString())
+            vh.cv.setOnClickListener(View.OnClickListener {
+                router.navigateTo(Screen.CARD_SCREEN,
+                        hashMapOf(
+                                "owner" to result[i].owner.login,
+                                "repo" to result[i].name,
+                                "license" to result[i].license?.key
+                        )
+                )
+            })
+
         }
     }
 
