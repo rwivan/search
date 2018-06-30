@@ -42,7 +42,7 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.setLayoutManager(layoutManager)
         recyclerView.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
-            override fun getTotalPageCount():Int {
+            override fun getTotalCount():Int {
                 return listPresenter.totalCount
             }
 
@@ -67,12 +67,21 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         if (null == recyclerView.adapter) {
             val adapter = RecyclerViewAdapter(searchResult)
             recyclerView.setAdapter(adapter)
+        } else {
+            (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
         }
-        (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
     }
 
     override fun addLoadingFooter() {
-        (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
+        if (null != recyclerView.adapter) {
+            (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
+        }
+    }
+
+    override fun removeLoadingFooter() {
+        if (null != recyclerView.adapter) {
+            (recyclerView.adapter as RecyclerViewAdapter).removeLoadingFooter()
+        }
     }
 
     override fun activityToast2(string: String) {

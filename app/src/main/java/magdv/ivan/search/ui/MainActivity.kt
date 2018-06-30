@@ -49,7 +49,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             })
         }.debounce(500, TimeUnit.MILLISECONDS)
                 .map { it.toString() }
-                .filter { it.length > 2 }
+                .filter { it.length > 1 }
                 .distinctUntilChanged()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

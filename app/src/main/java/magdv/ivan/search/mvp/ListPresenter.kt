@@ -50,11 +50,9 @@ class ListPresenter : MvpPresenter<ListView>() {
                 .subscribe(object : Observer<SearchResponse> {
                     override fun onComplete() {
                         isLoading = false
-                        //viewState.activityToast2("конец")
                     }
 
                     override fun onSubscribe(d: Disposable) {
-                        //viewState.activityToast2("кто-то подписался")
                     }
 
                     override fun onNext(t: SearchResponse) {
@@ -63,12 +61,10 @@ class ListPresenter : MvpPresenter<ListView>() {
                         viewState.removeLoadingFooter()
                         viewState.showSearchResult(t.items)
                         viewState.addLoadingFooter()
-                        viewState.activityToast2("дальше")
-                        viewState.activityToast2(t.total_count.toString())
                     }
 
                     override fun onError(e: Throwable) {
-                        viewState.activityToast2("ошибка")
+                        isLoading = false
                     }
                 })
     }
