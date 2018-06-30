@@ -15,7 +15,6 @@ import magdv.ivan.search.Screen
 import magdv.ivan.search.mvp.MainPresenter
 import magdv.ivan.search.mvp.MainView
 import org.jetbrains.anko.support.v4.withArguments
-import org.jetbrains.anko.toast
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.SupportFragmentNavigator
@@ -83,9 +82,5 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onPause() {
         super.onPause()
         navigatorHolder.removeNavigator()
-    }
-
-    override fun activityToast(string: String) {
-        toast(string)
     }
 }

@@ -32,6 +32,7 @@ class ListPresenter : MvpPresenter<ListView>() {
     }
 
     fun instantSearch(q: String) {
+        viewState.clearList()
         searchTerm = q
         page = 1
         load()
@@ -58,9 +59,7 @@ class ListPresenter : MvpPresenter<ListView>() {
                     override fun onNext(t: SearchResponse) {
                         totalCount = t.total_count
                         isLastPage = page > totalCount / IGitHubApi.PER_PAGE
-                        viewState.removeLoadingFooter()
                         viewState.showSearchResult(t.items)
-                        viewState.addLoadingFooter()
                     }
 
                     override fun onError(e: Throwable) {

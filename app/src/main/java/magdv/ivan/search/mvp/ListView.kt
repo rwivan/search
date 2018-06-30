@@ -4,8 +4,6 @@ import com.arellomobile.mvp.MvpView
 import magdv.ivan.search.data.Repository
 
 interface ListView : MvpView {
-    fun activityToast2(string: String)
-    fun showSearchResult(searchResult: MutableList<Repository>)
-    fun addLoadingFooter()
-    fun removeLoadingFooter()
+    fun clearList()
+    fun showSearchResult(searchResult: List<Repository>)
 }

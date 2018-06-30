@@ -29,6 +29,8 @@ class CardFragment : MvpAppCompatFragment(), CardView {
     }
 
     override fun showRepository(repository: Repository) {
+        progress.visibility = View.GONE
+        scrollView.visibility = View.VISIBLE
         owner.setText(repository.owner.login)
         if (name.text.isEmpty()) name.setText(repository.name)
         description.setText(repository.description)

@@ -104,4 +104,8 @@ class RecyclerViewAdapter internal constructor(internal var result: MutableList<
             notifyItemRemoved(result.size)
         }
     }
+
+    fun clearList() {
+        result.clear()
+    }
 }

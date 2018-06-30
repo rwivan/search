@@ -14,24 +14,20 @@ import magdv.ivan.search.adapter.RecyclerViewAdapter
 import magdv.ivan.search.data.Repository
 import magdv.ivan.search.mvp.ListPresenter
 import magdv.ivan.search.mvp.ListView
-import magdv.ivan.search.network.response.SearchResponse
-import org.jetbrains.anko.support.v4.toast
 
 
 class ListFragment : MvpAppCompatFragment(), ListView {
     @InjectPresenter
     lateinit var listPresenter: ListPresenter;
-    lateinit var searchResponse: SearchResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        listPresenter.instantSearch(arguments?.getString("q")!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val layout = inflater.inflate(R.layout.fragment_list, container, false)
-        listPresenter.instantSearch(arguments?.getString("q")!!)
-        return layout
+        return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,28 +54,23 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun showSearchResult(searchResult: MutableList<Repository>) {
+    override fun clearList() {
+        if (null != recyclerView.adapter) {
+            (recyclerView.adapter as RecyclerViewAdapter).clearList()
+        }
+    }
+
+    override fun showSearchResult(searchResult: List<Repository>) {
+        progress.visibility = View.GONE
         if (null == recyclerView.adapter) {
-            val adapter = RecyclerViewAdapter(searchResult)
+            val list = mutableListOf<Repository>()
+            list.addAll(searchResult)
+            val adapter = RecyclerViewAdapter(list)
             recyclerView.setAdapter(adapter)
         } else {
+            (recyclerView.adapter as RecyclerViewAdapter).removeLoadingFooter()
             (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
         }
-    }
-
-    override fun addLoadingFooter() {
-        if (null != recyclerView.adapter) {
-            (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
-        }
-    }
-
-    override fun removeLoadingFooter() {
-        if (null != recyclerView.adapter) {
-            (recyclerView.adapter as RecyclerViewAdapter).removeLoadingFooter()
-        }
-    }
-
-    override fun activityToast2(string: String) {
-        toast(string)
+        (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
     }
 }
