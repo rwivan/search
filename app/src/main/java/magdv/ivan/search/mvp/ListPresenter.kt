@@ -62,12 +62,13 @@ class ListPresenter : MvpPresenter<ListView>() {
                             isLastPage = page > totalCount / IGitHubApi.PER_PAGE
                             viewState.showSearchResult(t.items)
                         } else {
-                            router.newRootScreen(Screen.EMPTY_SCREEN)
+                            router.newRootScreen(Screen.ERROR_SCREEN, "empty")
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         isLoading = false
+                        router.newRootScreen(Screen.ERROR_SCREEN, "error")
                     }
                 })
     }

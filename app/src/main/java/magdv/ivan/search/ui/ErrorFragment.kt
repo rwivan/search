@@ -1,0 +1,24 @@
+package magdv.ivan.search.ui
+
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_error.*
+import magdv.ivan.search.R
+
+class ErrorFragment : Fragment() {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_error, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        when (arguments?.getString("code")!!) {
+            "empty" -> errorText.setText(getResources().getString(R.string.error))
+            else -> errorText.setText(getResources().getString(R.string.error))
+        }
+    }
+}

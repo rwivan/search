@@ -2,4 +2,5 @@
     <string name="app_name">search</string>
 
     <string name="empty">К сожалению, по вашему запросу ничего не найдено</string>
+    <string name="error">Сервер не отвечает</string>
 </resources>
