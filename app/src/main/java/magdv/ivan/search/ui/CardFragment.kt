@@ -44,12 +44,28 @@ class CardFragment : MvpAppCompatFragment(), CardView {
         progress.visibility = View.GONE
         scrollView.visibility = View.VISIBLE
         owner.setText(repository.owner.login)
-        if (name.text.isEmpty()) name.setText(repository.name)
+        if (name.text.isEmpty()) {
+            synchronized(CardFragment::class) {
+                if (name.text.isEmpty()) {
+                    name.setText(repository.name)
+                }
+            }
+        }
         description.setText(repository.description)
         language.setText(repository.language)
         stargazers.setText(repository.stargazers_count.toString())
         forks.setText(repository.forks_count.toString())
-        if (license.text.isEmpty()) license.setText(repository.license?.name)
+        if (license.text.isEmpty()) {
+            synchronized(CardFragment::class) {
+                if (license.text.isEmpty()) {
+                    if (null != repository.license?.name) {
+                        license.visibility = View.VISIBLE
+                        licenseHead.visibility = View.VISIBLE
+                        license.setText(repository.license?.name)
+                    }
+                }
+            }
+        }
         Glide
                 .with(context!!)
                 .load(repository.owner.avatar_url)
@@ -57,10 +73,22 @@ class CardFragment : MvpAppCompatFragment(), CardView {
     }
 
     override fun setUserName(name: String) {
-        owner.setText(name)
+        if (! name.isEmpty()) {
+            synchronized(CardFragment::class) {
+                if (!name.isEmpty()) {
+                    owner.setText(name)
+                }
+            }
+        }
     }
 
     override fun setLicense(body: String) {
-        license.setText(body)
+        if (! body.isEmpty()) {
+            synchronized(CardFragment::class) {
+                if (! body.isEmpty()) {
+                    license.setText(body)
+                }
+            }
+        }
     }
 }

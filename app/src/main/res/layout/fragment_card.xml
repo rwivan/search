@@ -81,6 +81,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/name" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/licenseHead"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -94,6 +95,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/description" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/license"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
