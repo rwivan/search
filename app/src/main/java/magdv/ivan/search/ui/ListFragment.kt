@@ -71,8 +71,4 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         }
         (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
     }
-
-    override fun showEmptyResult() {
-        progress.visibility = View.GONE
-    }
 }

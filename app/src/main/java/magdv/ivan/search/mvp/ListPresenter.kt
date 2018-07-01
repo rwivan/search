@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import magdv.ivan.search.App
+import magdv.ivan.search.Screen
 import magdv.ivan.search.network.api.IGitHubApi
 import magdv.ivan.search.network.response.SearchResponse
 import ru.terrakok.cicerone.Router
@@ -61,7 +62,7 @@ class ListPresenter : MvpPresenter<ListView>() {
                             isLastPage = page > totalCount / IGitHubApi.PER_PAGE
                             viewState.showSearchResult(t.items)
                         } else {
-                            viewState.showEmptyResult()
+                            router.newRootScreen(Screen.EMPTY_SCREEN)
                         }
                     }
 
