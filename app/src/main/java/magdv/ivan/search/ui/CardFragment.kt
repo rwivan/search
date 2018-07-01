@@ -1,9 +1,11 @@
 package magdv.ivan.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
@@ -13,9 +15,16 @@ import magdv.ivan.search.data.Repository
 import magdv.ivan.search.mvp.CardPresenter
 import magdv.ivan.search.mvp.CardView
 
+
 class CardFragment : MvpAppCompatFragment(), CardView {
     @InjectPresenter
     lateinit var cardPresenter: CardPresenter;
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val repository = (arguments?.get("repository") as HashMap<String, String>)
+        cardPresenter.showCard(repository.get("owner")!!, repository.get("repo")!!, repository.get("license"))
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -24,8 +33,11 @@ class CardFragment : MvpAppCompatFragment(), CardView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repository = (arguments?.get("repository") as HashMap<String, String>)
-        cardPresenter.showCard(repository.get("owner")!!, repository.get("repo")!!, repository.get("license"))
+        scrollView.setOnTouchListener { v, event ->
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            false
+        }
     }
 
     override fun showRepository(repository: Repository) {

@@ -1,10 +1,12 @@
 package magdv.ivan.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -34,24 +36,20 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         val layoutManager = LinearLayoutManager(activity)
         recyclerView.setLayoutManager(layoutManager)
         recyclerView.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
-            override fun getTotalCount(): Int {
-                return listPresenter.totalCount
-            }
-
-            override fun isLastPage(): Boolean {
-                return listPresenter.isLastPage
-            }
-
-            override fun isLoading(): Boolean {
-                return listPresenter.isLoading
-            }
-
+            override fun getTotalCount(): Int = listPresenter.totalCount
+            override fun isLastPage(): Boolean = listPresenter.isLastPage
+            override fun isLoading(): Boolean = listPresenter.isLoading
             override fun loadMoreItems() {
                 listPresenter.loadMoreItems()
             }
         })
 
         super.onViewCreated(view, savedInstanceState)
+        recyclerView.setOnTouchListener { v, event ->
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            false
+        }
     }
 
     override fun clearList() {
@@ -72,5 +70,9 @@ class ListFragment : MvpAppCompatFragment(), ListView {
             (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
         }
         (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
+    }
+
+    override fun showEmptyResult() {
+        progress.visibility = View.GONE
     }
 }

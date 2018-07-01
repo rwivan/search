@@ -72,9 +72,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
                 finish()
             }
 
-            override fun showSystemMessage(message: String?) {
-
-            }
+            override fun showSystemMessage(message: String?) = Unit
         }
         navigatorHolder.setNavigator(navigator)
     }
@@ -82,5 +80,9 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onPause() {
         super.onPause()
         navigatorHolder.removeNavigator()
+    }
+
+    override fun onBackPressed() {
+        mainPresenter.onBackPressed()
     }
 }

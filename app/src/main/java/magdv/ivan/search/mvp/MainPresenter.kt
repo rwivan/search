@@ -22,4 +22,8 @@ class MainPresenter : MvpPresenter<MainView>() {
     fun showList(searchTerm: String) {
         router.newRootScreen(Screen.LIST_SCREEN, searchTerm)
     }
+
+    fun onBackPressed() {
+        router.exit()
+    }
 }

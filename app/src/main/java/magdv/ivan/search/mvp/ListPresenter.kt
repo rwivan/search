@@ -53,13 +53,16 @@ class ListPresenter : MvpPresenter<ListView>() {
                         isLoading = false
                     }
 
-                    override fun onSubscribe(d: Disposable) {
-                    }
+                    override fun onSubscribe(d: Disposable) = Unit
 
                     override fun onNext(t: SearchResponse) {
                         totalCount = t.total_count
-                        isLastPage = page > totalCount / IGitHubApi.PER_PAGE
-                        viewState.showSearchResult(t.items)
+                        if (totalCount > 0) {
+                            isLastPage = page > totalCount / IGitHubApi.PER_PAGE
+                            viewState.showSearchResult(t.items)
+                        } else {
+                            viewState.showEmptyResult()
+                        }
                     }
 
                     override fun onError(e: Throwable) {

@@ -9,7 +9,7 @@ import magdv.ivan.search.ui.MainActivity
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(NavigateModule::class, ApiModule::class))
+@Component(modules = arrayOf(NavigateModule::class, ApiModule::class, AppModule::class))
 interface AppComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(mainPresenter: MainPresenter)
