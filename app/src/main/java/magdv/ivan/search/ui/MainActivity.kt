@@ -1,9 +1,12 @@
 package magdv.ivan.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.SearchView
+import android.util.AttributeSet
 import android.view.Menu
+import android.view.View
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import io.reactivex.Observable
@@ -17,6 +20,7 @@ import magdv.ivan.search.mvp.MainView
 import org.jetbrains.anko.support.v4.withArguments
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.SupportFragmentNavigator
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -27,6 +31,8 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     lateinit var navigatorHolder: NavigatorHolder
     @InjectPresenter
     lateinit var mainPresenter: MainPresenter;
+    @Inject
+    lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.appComponent.inject(this)
@@ -83,6 +89,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         mainPresenter.onBackPressed()
     }
 }

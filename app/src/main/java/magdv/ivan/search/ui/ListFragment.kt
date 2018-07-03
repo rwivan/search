@@ -17,9 +17,6 @@ import magdv.ivan.search.adapter.RecyclerViewAdapter
 import magdv.ivan.search.data.Repository
 import magdv.ivan.search.mvp.ListPresenter
 import magdv.ivan.search.mvp.ListView
-import org.jetbrains.anko.AlertBuilder
-import org.jetbrains.anko.AlertDialogBuilder
-import org.jetbrains.anko.appcompat.v7.Appcompat
 import org.jetbrains.anko.support.v4.alert
 
 

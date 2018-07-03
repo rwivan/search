@@ -7,18 +7,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import magdv.ivan.search.App
-import magdv.ivan.search.Screen
 import magdv.ivan.search.network.api.IGitHubApi
 import magdv.ivan.search.network.response.SearchResponse
-import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 @InjectViewState
 class ListPresenter : MvpPresenter<ListView>() {
     @Inject
     lateinit var gitHubApi: IGitHubApi
-    @Inject
-    lateinit var router: Router
     var totalCount: Int = 0
         private set
     var isLastPage: Boolean = true

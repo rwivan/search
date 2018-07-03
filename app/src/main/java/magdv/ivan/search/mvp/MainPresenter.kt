@@ -11,8 +11,6 @@ import javax.inject.Inject
 @InjectViewState
 class MainPresenter : MvpPresenter<MainView>() {
     @Inject
-    lateinit var gitHubApi: IGitHubApi
-    @Inject
     lateinit var router: Router
 
     init {
