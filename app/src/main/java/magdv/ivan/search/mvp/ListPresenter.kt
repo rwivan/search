@@ -32,13 +32,12 @@ class ListPresenter : MvpPresenter<ListView>() {
         App.appComponent.inject(this)
     }
 
-    override fun onFirstViewAttach() {
-
+    fun setSeachTerm(q: String) {
+        searchTerm = q
     }
 
-    fun instantSearch(q: String) {
+    override fun onFirstViewAttach() {
         viewState.clearList()
-        searchTerm = q
         page = 1
         load()
     }
@@ -66,13 +65,13 @@ class ListPresenter : MvpPresenter<ListView>() {
                             isLastPage = page >= totalCount / IGitHubApi.PER_PAGE
                             viewState.showSearchResult(t.items)
                         } else {
-                            router.newRootScreen(Screen.ERROR_SCREEN, Screen.ERROR_SCREEN_TYPE_EMPTY)
+                            viewState.showEmptyResult()
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         isLoading = false
-                        router.newRootScreen(Screen.ERROR_SCREEN, Screen.ERROR_SCREEN_TYPE_ERROR)
+                        viewState.showError()
                     }
                 })
     }

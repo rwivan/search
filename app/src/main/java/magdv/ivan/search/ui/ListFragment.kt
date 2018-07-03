@@ -10,12 +10,17 @@ import android.view.inputmethod.InputMethodManager
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.progress.*
 import magdv.ivan.search.R
 import magdv.ivan.search.adapter.PaginationScrollListener
 import magdv.ivan.search.adapter.RecyclerViewAdapter
 import magdv.ivan.search.data.Repository
 import magdv.ivan.search.mvp.ListPresenter
 import magdv.ivan.search.mvp.ListView
+import org.jetbrains.anko.AlertBuilder
+import org.jetbrains.anko.AlertDialogBuilder
+import org.jetbrains.anko.appcompat.v7.Appcompat
+import org.jetbrains.anko.support.v4.alert
 
 
 class ListFragment : MvpAppCompatFragment(), ListView {
@@ -24,7 +29,7 @@ class ListFragment : MvpAppCompatFragment(), ListView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listPresenter.instantSearch(arguments?.getString("q")!!)
+        listPresenter.setSeachTerm(arguments?.getString("q")!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +64,7 @@ class ListFragment : MvpAppCompatFragment(), ListView {
     }
 
     override fun showSearchResult(searchResult: List<Repository>) {
-        progress.visibility = View.GONE
+        viewShow(recyclerView)
         if (null == recyclerView.adapter) {
             val list = mutableListOf<Repository>()
             list.addAll(searchResult)
@@ -69,8 +74,26 @@ class ListFragment : MvpAppCompatFragment(), ListView {
             (recyclerView.adapter as RecyclerViewAdapter).removeLoadingFooter()
             (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
         }
-        if (! listPresenter.isLastPage) {
+        if (!listPresenter.isLastPage) {
             (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
+        }
+    }
+
+    override fun showEmptyResult() {
+        viewShow(emptyTextView)
+        emptyTextView.setText(R.string.empty)
+    }
+
+    override fun showError() {
+        alert(R.string.error).show()
+    }
+
+    private fun viewShow(view: View) {
+        if (View.VISIBLE != view.visibility) {
+            progress.visibility = View.GONE;
+            emptyTextView.visibility = View.GONE;
+            recyclerView.visibility = View.GONE;
+            view.visibility = View.VISIBLE
         }
     }
 }

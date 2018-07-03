@@ -10,6 +10,7 @@ import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_card.*
+import kotlinx.android.synthetic.main.progress.*
 import magdv.ivan.search.R
 import magdv.ivan.search.data.Repository
 import magdv.ivan.search.mvp.CardPresenter
@@ -23,7 +24,7 @@ class CardFragment : MvpAppCompatFragment(), CardView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val repository = (arguments?.get("repository") as HashMap<String, String>)
-        cardPresenter.showCard(repository.get("owner")!!, repository.get("repo")!!, repository.get("license"))
+        cardPresenter.setOwnerRepo(repository.get("owner")!!, repository.get("repo")!!, repository.get("license"))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +42,7 @@ class CardFragment : MvpAppCompatFragment(), CardView {
     }
 
     override fun showRepository(repository: Repository) {
-        progress.visibility = View.GONE
-        scrollView.visibility = View.VISIBLE
+        viewShow(scrollView)
         owner.setText(repository.owner.login)
         if (name.text.isEmpty()) {
             synchronized(CardFragment::class) {
@@ -89,6 +89,14 @@ class CardFragment : MvpAppCompatFragment(), CardView {
                     license.setText(body)
                 }
             }
+        }
+    }
+
+    private fun viewShow(view: View) {
+        if (View.VISIBLE != view.visibility) {
+            progress.visibility = View.GONE;
+            scrollView.visibility = View.GONE
+            view.visibility = View.VISIBLE
         }
     }
 }

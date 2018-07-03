@@ -53,7 +53,7 @@ class RecyclerViewAdapter internal constructor(internal var result: MutableList<
         val inflater = LayoutInflater.from(viewGroup.context)
         when (i) {
             ITEM -> return SearchResponseViewHolder(inflater.inflate(R.layout.item, viewGroup, false))
-            else -> return ProgressViewHolder(inflater.inflate(R.layout.progress, viewGroup, false))
+            else -> return ProgressViewHolder(inflater.inflate(R.layout.item_progress, viewGroup, false))
         }
     }
 

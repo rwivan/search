@@ -63,7 +63,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         val navigator: Navigator = object : SupportFragmentNavigator(supportFragmentManager, R.id.main_container) {
             override fun createFragment(screenKey: String?, data: Any?): Fragment {
                 when (screenKey) {
-                    Screen.ERROR_SCREEN -> return ErrorFragment().withArguments(Pair("code", data))
                     Screen.CARD_SCREEN -> return CardFragment().withArguments(Pair("repository", data))
                     else -> return ListFragment().withArguments(Pair("q", data.toString()))
                 }

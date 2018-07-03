@@ -18,12 +18,21 @@ import javax.inject.Inject
 class CardPresenter : MvpPresenter<CardView>() {
     @Inject
     lateinit var gitHubApi: IGitHubApi
+    private var owner: String = ""
+    private var repo: String = ""
+    private var license: String? = null
 
     init {
         App.appComponent.inject(this)
     }
 
-    fun showCard(owner: String, repo: String, license: String?) {
+    fun setOwnerRepo(o: String, r: String, l: String?) {
+        owner = o
+        repo = r
+        license = l
+    }
+
+    override fun onFirstViewAttach() {
         gitHubApi.repos(owner, repo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,7 +60,7 @@ class CardPresenter : MvpPresenter<CardView>() {
                     }
                 })
         if (null != license) {
-            gitHubApi.licenses(license)
+            gitHubApi.licenses(license!!)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(object : Observer<License> {
