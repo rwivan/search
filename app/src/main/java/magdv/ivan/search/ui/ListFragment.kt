@@ -69,6 +69,8 @@ class ListFragment : MvpAppCompatFragment(), ListView {
             (recyclerView.adapter as RecyclerViewAdapter).removeLoadingFooter()
             (recyclerView.adapter as RecyclerViewAdapter).addAll(searchResult)
         }
-        (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
+        if (! listPresenter.isLastPage) {
+            (recyclerView.adapter as RecyclerViewAdapter).addLoadingFooter()
+        }
     }
 }
