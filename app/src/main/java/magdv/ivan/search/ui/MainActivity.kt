@@ -1,10 +1,9 @@
 package magdv.ivan.search.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.SearchView
-import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.View
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -33,6 +32,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     lateinit var mainPresenter: MainPresenter;
     @Inject
     lateinit var router: Router
+    lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         App.appComponent.inject(this)
@@ -42,7 +42,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
-        val searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
+        searchView = menu.findItem(R.id.action_search)?.actionView as SearchView
         Observable.create<String>() {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean {
@@ -61,6 +61,19 @@ class MainActivity : MvpAppCompatActivity(), MainView {
                 .subscribe {
                     mainPresenter.showList(it.toString())
                 }
+        searchView.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v:View?, keyCode: Int, event: KeyEvent?) : Boolean {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    searchView.onActionViewCollapsed();
+                    return true;
+                }
+                return false
+            }
+        })
+        searchView.setOnCloseListener {
+            mainPresenter.backToList()
+            false
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -90,6 +103,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        mainPresenter.onBackPressed()
+        mainPresenter.backToList()
+    }
+
+    fun searchViewClearFocus()
+    {
+        searchView.clearFocus()
     }
 }

@@ -11,4 +11,6 @@ interface ListView : MvpView {
     fun showEmptyResult()
     @StateStrategyType(SkipStrategy::class)
     fun showError()
+    fun visibleList()
+    fun visibleEmptyText()
 }

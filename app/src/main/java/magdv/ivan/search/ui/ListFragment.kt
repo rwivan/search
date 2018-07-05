@@ -50,6 +50,7 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         recyclerView.setOnTouchListener { v, event ->
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            (activity as MainActivity).searchViewClearFocus()
             false
         }
     }
@@ -61,7 +62,6 @@ class ListFragment : MvpAppCompatFragment(), ListView {
     }
 
     override fun showSearchResult(searchResult: List<Repository>) {
-        viewShow(recyclerView)
         if (null == recyclerView.adapter) {
             val list = mutableListOf<Repository>()
             list.addAll(searchResult)
@@ -77,7 +77,6 @@ class ListFragment : MvpAppCompatFragment(), ListView {
     }
 
     override fun showEmptyResult() {
-        viewShow(emptyTextView)
         emptyTextView.setText(R.string.empty)
     }
 
@@ -85,12 +84,17 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         alert(R.string.error).show()
     }
 
-    private fun viewShow(view: View) {
-        if (View.VISIBLE != view.visibility) {
-            progress.visibility = View.GONE;
-            emptyTextView.visibility = View.GONE;
-            recyclerView.visibility = View.GONE;
-            view.visibility = View.VISIBLE
-        }
+    override fun visibleList()
+    {
+        progress.visibility = View.GONE;
+        emptyTextView.visibility = View.GONE;
+        recyclerView.visibility = View.VISIBLE;
+    }
+
+    override fun visibleEmptyText()
+    {
+        progress.visibility = View.GONE;
+        emptyTextView.visibility = View.VISIBLE;
+        recyclerView.visibility = View.GONE;
     }
 }

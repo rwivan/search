@@ -41,6 +41,7 @@ class CardPresenter : MvpPresenter<CardView>() {
                     override fun onSubscribe(d: Disposable) = Unit
                     override fun onError(e: Throwable) = Unit
                     override fun onNext(t: Repository) {
+                        viewState.visibleCard()
                         viewState.showRepository(t)
                     }
                 })
@@ -56,6 +57,7 @@ class CardPresenter : MvpPresenter<CardView>() {
                         if (null != t.name) {
                             n += " / " + t.name
                         }
+                        viewState.visibleCard()
                         viewState.setUserName(n)
                     }
                 })
@@ -70,6 +72,7 @@ class CardPresenter : MvpPresenter<CardView>() {
                         override fun onNext(t: License) {
                             if (null != t.body) {
                                 val l = t.body.replace("[year]", Date().year.toString()).replace("[fullname]", owner)
+                                viewState.visibleCard()
                                 viewState.setLicense(l)
                             }
                         }

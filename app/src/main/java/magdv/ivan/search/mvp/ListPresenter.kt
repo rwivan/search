@@ -58,9 +58,11 @@ class ListPresenter : MvpPresenter<ListView>() {
                     override fun onNext(t: SearchResponse) {
                         totalCount = t.total_count
                         if (totalCount > 0) {
+                            viewState.visibleList()
                             isLastPage = page >= totalCount / IGitHubApi.PER_PAGE
                             viewState.showSearchResult(t.items)
                         } else {
+                            viewState.visibleEmptyText()
                             viewState.showEmptyResult()
                         }
                     }

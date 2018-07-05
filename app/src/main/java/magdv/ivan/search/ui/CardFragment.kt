@@ -29,7 +29,11 @@ class CardFragment : MvpAppCompatFragment(), CardView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_card, container, false)
+        val layout = inflater.inflate(R.layout.fragment_card, container, false)
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(layout.getWindowToken(), 0)
+        (activity as MainActivity).searchViewClearFocus()
+        return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,12 +41,12 @@ class CardFragment : MvpAppCompatFragment(), CardView {
         scrollView.setOnTouchListener { v, event ->
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            (activity as MainActivity).searchViewClearFocus()
             false
         }
     }
 
     override fun showRepository(repository: Repository) {
-        viewShow(scrollView)
         owner.setText(repository.owner.login)
         if (name.text.isEmpty()) {
             synchronized(CardFragment::class) {
@@ -92,11 +96,8 @@ class CardFragment : MvpAppCompatFragment(), CardView {
         }
     }
 
-    private fun viewShow(view: View) {
-        if (View.VISIBLE != view.visibility) {
-            progress.visibility = View.GONE;
-            scrollView.visibility = View.GONE
-            view.visibility = View.VISIBLE
-        }
+    override fun visibleCard() {
+        progress.visibility = View.GONE;
+        scrollView.visibility = View.VISIBLE
     }
 }
