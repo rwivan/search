@@ -3,11 +3,8 @@ package magdv.ivan.search.ui
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.InputMethodManager
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.progress.*
@@ -19,8 +16,7 @@ import magdv.ivan.search.mvp.ListPresenter
 import magdv.ivan.search.mvp.ListView
 import org.jetbrains.anko.support.v4.alert
 
-
-class ListFragment : MvpAppCompatFragment(), ListView {
+class ListFragment : StartFragment(), ListView {
     @InjectPresenter
     lateinit var listPresenter: ListPresenter;
 
@@ -50,9 +46,16 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         recyclerView.setOnTouchListener { v, event ->
             val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
-            (activity as MainActivity).searchViewClearFocus()
+            searchView.clearFocus()
             false
         }
+        progress.visibility = View.VISIBLE;
+        emptyTextView.visibility = View.GONE;
+        recyclerView.visibility = View.GONE;
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun clearList() {
@@ -84,17 +87,25 @@ class ListFragment : MvpAppCompatFragment(), ListView {
         alert(R.string.error).show()
     }
 
-    override fun visibleList()
-    {
+    override fun visibleProgress() {
+        progress.visibility = View.VISIBLE;
+        emptyTextView.visibility = View.GONE;
+        recyclerView.visibility = View.GONE;
+    }
+
+    override fun visibleList() {
         progress.visibility = View.GONE;
         emptyTextView.visibility = View.GONE;
         recyclerView.visibility = View.VISIBLE;
     }
 
-    override fun visibleEmptyText()
-    {
+    override fun visibleEmptyText() {
         progress.visibility = View.GONE;
         emptyTextView.visibility = View.VISIBLE;
         recyclerView.visibility = View.GONE;
+    }
+
+    override fun setSearchViewText(query: String) {
+        //searchView.setQuery(query, false)
     }
 }

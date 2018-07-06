@@ -1,5 +1,6 @@
 package magdv.ivan.search.mvp
 
+import android.view.View
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.Observer
@@ -21,7 +22,7 @@ class ListPresenter : MvpPresenter<ListView>() {
         private set
     var isLoading: Boolean = false
         private set
-    private lateinit var searchTerm: String
+    private var searchTerm: String = ""
     private var page: Int = 0
 
     init {
@@ -33,6 +34,7 @@ class ListPresenter : MvpPresenter<ListView>() {
     }
 
     override fun onFirstViewAttach() {
+        viewState.visibleProgress()
         viewState.clearList()
         page = 1
         load()
