@@ -57,8 +57,8 @@ class CardFragment : MvpAppCompatFragment(), CardView {
         }
         description.setText(repository.description)
         language.setText(repository.language)
-        stargazers.setText(repository.stargazers_count.toString())
-        forks.setText(repository.forks_count.toString())
+        stargazers.setText(repository.starCount.toString())
+        forks.setText(repository.forksCount.toString())
         if (license.text.isEmpty()) {
             synchronized(CardFragment::class) {
                 if (license.text.isEmpty()) {
@@ -72,7 +72,7 @@ class CardFragment : MvpAppCompatFragment(), CardView {
         }
         Glide
                 .with(context!!)
-                .load(repository.owner.avatar_url)
+                .load(repository.owner.avatarUrl)
                 .into(avatar);
     }
 

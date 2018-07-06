@@ -1,53 +1,50 @@
-package magdv.ivan.search.mvp
+package magdv.ivan.search.network
 
-import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import magdv.ivan.search.App
+import magdv.ivan.search.data.IRepositoryListSource
+import magdv.ivan.search.data.Repository
 import magdv.ivan.search.network.api.IGitHubApi
 import magdv.ivan.search.network.response.SearchResponse
 import javax.inject.Inject
 
-@InjectViewState
-class ListPresenter : MvpPresenter<ListView>() {
-    @Inject
-    lateinit var gitHubApi: IGitHubApi
+class RepositoryListNetworkLoader @Inject constructor(private val gitHubApi: IGitHubApi): IRepositoryListSource{
+    private lateinit var searchTerm: String
+    private var page = 0;
     var totalCount: Int = 0
         private set
     var isLastPage: Boolean = true
         private set
     var isLoading: Boolean = false
         private set
-    private lateinit var searchTerm: String
-    private var page: Int = 0
 
-    init {
-        App.appComponent.inject(this)
-    }
-
-    fun setSeachTerm(q: String) {
-        searchTerm = q
-    }
-
-    override fun onFirstViewAttach() {
-        viewState.clearList()
+    override fun getFirstPageListRepository(searchTerm: String): Observable<List<Repository>> {
+        this.searchTerm = searchTerm
         page = 1
-        load()
+        return Observable.concat(loadFromServer())
     }
 
-    fun loadMoreItems() {
-        page++
-        load()
+    override fun loadMoreListRepository(): List<Repository> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private fun load() {
+    override fun getTotalItems(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun loadFromServer() {
         isLoading = true
         gitHubApi.search(searchTerm, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError { _ -> isLoading = false }
+                .doAfterSuccess { _ ->
+                    isLoading = false
+                }
+
                 .subscribe(object : Observer<SearchResponse> {
                     override fun onComplete() {
                         isLoading = false

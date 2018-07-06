@@ -66,8 +66,8 @@ class RecyclerViewAdapter internal constructor(internal var result: MutableList<
             vh.name.setText(result[i].name)
             vh.description.setText(result[i].description)
             vh.language.setText(result[i].language)
-            vh.stargazers.setText(result[i].stargazers_count.toString())
-            vh.forks.setText(result[i].forks_count.toString())
+            vh.stargazers.setText(result[i].starCount.toString())
+            vh.forks.setText(result[i].forksCount.toString())
             vh.cv.setOnClickListener(View.OnClickListener {
                 router.navigateTo(Screen.CARD_SCREEN,
                         hashMapOf(
