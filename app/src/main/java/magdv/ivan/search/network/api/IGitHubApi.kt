@@ -5,6 +5,7 @@ import magdv.ivan.search.data.License
 import magdv.ivan.search.data.Repository
 import magdv.ivan.search.data.User
 import magdv.ivan.search.network.response.SearchResponse
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -19,11 +20,23 @@ interface IGitHubApi {
             "Accept: application/vnd.github.v3.text-match+json",
             "User-Agent: My-App-GitHub-Search"
     )
-    @GET("search/repositories?sort=stars&order=desc&per_page=2")
+    @GET("search/repositories?sort=stars&order=desc")
     abstract fun search(
             @Query("q") q: String,
-            @Query("page") page: Int
+            @Query("page") page: Int,
+            @Query("per_page") per_page: Int = PER_PAGE
     ): Observable<SearchResponse>
+
+    @Headers(
+            "Accept: application/vnd.github.v3.text-match+json",
+            "User-Agent: My-App-GitHub-Search"
+    )
+    @GET("search/repositories?sort=stars&order=desc")
+    abstract fun searchCall(
+            @Query("q") q: String,
+            @Query("page") page: Int,
+            @Query("per_page") per_page: Int = PER_PAGE
+    ): Call<SearchResponse>
 
     @Headers(
             "Accept: application/vnd.github.v3.text-match+json",

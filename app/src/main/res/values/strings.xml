@@ -3,4 +3,5 @@
 
     <string name="empty">К сожалению, по вашему запросу ничего не найдено.</string>
     <string name="error">Сервер вернул ошибку, попробуйте посже.</string>
+    <string name="retry">Повторить запрос</string>
 </resources>
