@@ -7,6 +7,7 @@ import magdv.ivan.search.mvp.ListPresenter
 import magdv.ivan.search.ui.ListFragment
 import magdv.ivan.search.ui.MainActivity
 import magdv.ivan.search.ui.StartFragment
+import magdv.ivan.search.ui.RepositoryViewHolder
 import javax.inject.Singleton
 
 @Singleton
@@ -18,4 +19,5 @@ interface AppComponent {
     fun inject(startFragment: StartFragment)
     fun inject(recyclerViewAdapter: RecyclerViewAdapter)
     fun inject(cardPresenter: CardPresenter)
+    fun inject(repositoryViewHolder: RepositoryViewHolder)
 }
